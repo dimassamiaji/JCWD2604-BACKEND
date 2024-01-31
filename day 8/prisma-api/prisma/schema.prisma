@@ -1,0 +1,77 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = "mysql://root:password@localhost:3306/learn_prisma"
+}
+
+
+model Student {
+  id Int @id @default(autoincrement())
+  username String
+  fullname String
+  password String
+  isGraduated Boolean
+  program String
+  updatedAt DateTime @default(now())
+  createdAt DateTime @default(now())
+  MapStudentClass MapStudentClass[]
+
+}
+
+model Lecturer {
+  id Int @id @default(autoincrement())
+  username String
+  fullname String
+  password String
+  isActive Boolean
+  updatedAt DateTime  @default(now())
+  createdAt DateTime  @default(now())
+  MapLecturerClass MapLecturerClass[]
+}
+
+model Branch {
+  id Int @id @default(autoincrement())
+  name String
+  location String
+  updatedAt DateTime  @default(now()) 
+  createdAt DateTime  @default(now())
+  Class Class[]
+}
+
+model Class {
+  id Int @id @default(autoincrement())
+  name String
+  startAt DateTime  @default(now())
+  endAt DateTime  @default(now())
+  updatedAt DateTime  @default(now())
+  createdAt DateTime  @default(now())
+  branchId Int
+  Branch   Branch   @relation(fields: [branchId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  MapStudentClass MapStudentClass[]
+  MapLecturerClass MapLecturerClass[]
+}
+
+
+model MapStudentClass {
+studentId Int
+classId Int
+Student   Student   @relation(fields: [studentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+Class   Class   @relation(fields: [classId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+@@id([studentId, classId])
+}
+
+model MapLecturerClass {
+lecturerId  Int
+classId Int
+Lecturer   Lecturer   @relation(fields: [lecturerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+Class   Class   @relation(fields: [classId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+@@id([lecturerId, classId])
+}
+

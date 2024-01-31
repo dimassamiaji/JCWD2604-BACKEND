@@ -1,0 +1,3 @@
+npm init --y = bikin package json
+npm i express @types/express mysql2 prisma = install library
+npx prisma init = schema prisma 
