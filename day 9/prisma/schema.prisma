@@ -1,0 +1,66 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = "mysql://root:password@localhost:3306/db_blog"
+}
+enum Gender {
+  male
+  female
+}
+
+model User {
+  id Int @id @default(autoincrement())
+  email String @unique
+  password String 
+  first_name String
+  last_name String
+  gender Gender 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  articles Article[]
+  comments Comment[]
+}
+model Article {
+  id Int @id @default(autoincrement())
+  title String
+  authorId Int
+  content String 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  user   User  @relation(fields: [authorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  comments Comment[]
+  article_categories Article_Category[]
+}
+model Comment {
+  id Int @id @default(autoincrement())
+  articleId Int
+  userId Int
+  comment String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  user   User  @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  article   Article  @relation(fields: [articleId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model Category {
+  id Int @id @default(autoincrement())
+  category String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  article_categories Article_Category[]
+
+}
+
+model Article_Category {
+  articleId Int
+  categoryId Int
+  article   Article  @relation(fields: [articleId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  category   Category  @relation(fields: [categoryId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  @@id([articleId,categoryId])
+} 
