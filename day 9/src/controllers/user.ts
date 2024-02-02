@@ -3,13 +3,19 @@ import { Response, Request, NextFunction } from "express";
 import { prisma } from "..";
 import { Prisma } from "@prisma/client";
 
+import { genSalt, hash, compare } from "bcrypt";
+
 export const userController = {
   async register(req: Request, res: Response, next: NextFunction) {
     try {
       const { email, password, first_name, last_name, gender } = req.body;
+      const salt = await genSalt(10);
+
+      const hashedPassword = await hash(password, salt);
+
       const newUser: Prisma.UserCreateInput = {
         email,
-        password,
+        password: hashedPassword,
         first_name,
         last_name,
         gender,
@@ -37,25 +43,27 @@ export const userController = {
   async login(req: Request, res: Response, next: NextFunction) {
     try {
       const { email, password } = req.query;
-      const user = await prisma.user.findMany({
-        select: {
-          id: true,
-          email: true,
-          first_name: true,
-          last_name: true,
-          gender: true,
-        },
+
+      const user = await prisma.user.findUnique({
         where: {
           email: String(email),
-          password: String(password),
         },
       });
-      if (user.length == 0) throw Error("email/password salah");
+      if (!user) throw Error("email/password salah");
+      const checkPassword = await compare(String(password), user.password);
+      if (checkPassword)
+        return res.send({
+          success: true,
+          result: {
+            id: user.id,
+            email: user.email,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            gender: user.gender,
+          },
+        });
 
-      res.send({
-        success: true,
-        result: user,
-      });
+      throw Error("email/password tidak sesuai");
     } catch (error) {
       next(error);
     }
