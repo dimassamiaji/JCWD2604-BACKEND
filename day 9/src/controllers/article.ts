@@ -2,6 +2,7 @@
 import { Response, Request, NextFunction } from "express";
 import { prisma } from "..";
 import { Prisma } from "@prisma/client";
+import { TUser, ReqUser } from "../middlewares/auth-middleware";
 export const articleController = {
   async create(req: Request, res: Response, next: NextFunction) {
     try {
@@ -16,7 +17,7 @@ export const articleController = {
       next(error);
     }
   },
-  async read(req: Request, res: Response, next: NextFunction) {
+  async read(req: ReqUser, res: Response, next: NextFunction) {
     try {
       // [ {
       //     title : "",
@@ -38,6 +39,9 @@ export const articleController = {
       // join user u on u.id = a.authorId
       // join article_categories ac on ac.articleId = a.id
       // join category c on c.id = ac.categoryId
+
+      console.log(req.user);
+
       let articles = await prisma.article.findMany({
         select: {
           title: true,

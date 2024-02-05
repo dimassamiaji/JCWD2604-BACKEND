@@ -65,7 +65,7 @@ export const userController = {
       };
       if (checkPassword) {
         const token = sign(resUser, secretKey, {
-          expiresIn: "1hr",
+          expiresIn: "5m",
         });
 
         return res.send({
@@ -125,9 +125,14 @@ export const userController = {
         },
       });
       if (!checkUser) throw Error("unauthorized 2");
+
+      const token = sign(checkUser, secretKey, {
+        expiresIn: "5m",
+      });
       res.send({
         success: true,
         result: checkUser,
+        token,
       });
     } catch (error) {
       next(error);

@@ -5,7 +5,7 @@ import { verify } from "jsonwebtoken";
 import { prisma, secretKey } from "..";
 import { Prisma } from "@prisma/client";
 
-type TUser = {
+export type TUser = {
   id: number;
   email: string;
   first_name: string;
@@ -13,7 +13,7 @@ type TUser = {
   gender: string;
 };
 
-interface ReqUser extends Request {
+export interface ReqUser extends Request {
   user?: TUser;
 }
 
@@ -29,14 +29,14 @@ export const verifyUser = async (
 
     const verifyToken = verify(String(token), secretKey) as TUser;
 
-    const user = await prisma.user.findUnique({
+    const user = (await prisma.user.findUnique({
       where: {
         email: verifyToken?.email,
       },
-    });
-    console.log(user);
-
+    })) as TUser;
+    if (!user.id) throw Error("not found");
     req.user = user as TUser;
+    req.body.test = "hehehe";
     next();
   } catch (err) {
     next(err);
