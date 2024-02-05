@@ -1,7 +1,16 @@
 /** @format */
+import { Response, Request, NextFunction } from "express";
 
 import express, { Router } from "express";
 import { userController } from "../controllers/user";
 export const route: Router = express.Router();
-route.get("/", userController.login);
+route.get(
+  "/",
+  (req: Request, res: Response, next: NextFunction) => {
+    console.log("hello");
+    next();
+  },
+  userController.login
+);
 route.post("/", userController.register);
+route.patch("/", userController.forgotPassword);

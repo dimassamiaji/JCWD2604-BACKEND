@@ -3,15 +3,18 @@
 import express, { Application, Response, Request, NextFunction } from "express";
 import { PrismaClient } from "@prisma/client";
 import { routes } from "./routes";
+import { verifyUser } from "./middlewares/auth-middleware";
 
 export const prisma = new PrismaClient();
+
+export const secretKey = "rahasia";
 
 const app: Application = express();
 app.use(express.json());
 
 //routes
 app.use("/users", routes.userRoutes);
-app.use("/articles", routes.articleRoutes);
+app.use("/articles", verifyUser, routes.articleRoutes);
 app.use("/categories", routes.categoryRoutes);
 
 app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
