@@ -4,13 +4,14 @@ import express, { Application, Response, Request, NextFunction } from "express";
 import { PrismaClient } from "@prisma/client";
 import { routes } from "./routes";
 import { verifyUser } from "./middlewares/auth-middleware";
-
+import cors from "cors";
 export const prisma = new PrismaClient();
 
 export const secretKey = "rahasia";
 
 const app: Application = express();
 app.use(express.json());
+app.use(cors());
 
 //routes
 app.use("/users", routes.userRoutes);

@@ -12,5 +12,7 @@ route.get(
   },
   userController.login
 );
+route.get("/keep-login", userController.keepLogin);
+
 route.post("/", userController.register);
 route.patch("/", userController.forgotPassword);

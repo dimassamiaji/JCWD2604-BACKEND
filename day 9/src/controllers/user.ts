@@ -1,18 +1,20 @@
 /** @format */
 import { Response, Request, NextFunction } from "express";
-import { prisma, secretKey } from "..";
-import { Prisma } from "@prisma/client";
+import { prisma, secretKey } from ".."; //accessing model
+import { Prisma } from "@prisma/client"; // accessing interface/types
 
 import { genSalt, hash, compare } from "bcrypt";
-import { sign } from "jsonwebtoken";
+import { sign, verify } from "jsonwebtoken";
+
+type TUser = {
+  email: string;
+};
 
 export const userController = {
   async register(req: Request, res: Response, next: NextFunction) {
     try {
       const { email, password, first_name, last_name, gender } = req.body;
-      //password = ayam
-      //password = ayamasdasfgna
-      const salt = await genSalt(10);
+      const salt = await genSalt(10); //ayam1234567890
 
       const hashedPassword = await hash(password, salt);
 
@@ -24,13 +26,13 @@ export const userController = {
         gender,
       };
 
-      const checkUser = await prisma.user.findMany({
+      const checkUser = await prisma.user.findUnique({
         where: {
           email,
         },
       });
 
-      if (checkUser.length > 0) throw Error("user sudah terdaftar");
+      if (checkUser?.id) throw Error("user sudah terdaftar");
 
       await prisma.user.create({
         data: newUser,
@@ -98,6 +100,34 @@ export const userController = {
       res.send({
         success: true,
         message: "berhasil merubah password",
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+  async keepLogin(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { authorization } = req.headers;
+
+      if (!authorization) throw Error("unauthorized");
+
+      const verifyUser = verify(authorization, secretKey) as TUser;
+      const checkUser = await prisma.user.findUnique({
+        select: {
+          id: true,
+          email: true,
+          gender: true,
+          first_name: true,
+          last_name: true,
+        },
+        where: {
+          email: verifyUser.email,
+        },
+      });
+      if (!checkUser) throw Error("unauthorized 2");
+      res.send({
+        success: true,
+        result: checkUser,
       });
     } catch (error) {
       next(error);
