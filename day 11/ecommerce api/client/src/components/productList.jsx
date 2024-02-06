@@ -7,25 +7,27 @@ import { axiosInstance } from "../axios/axios";
 import Search from "../assets/search.png";
 import Link from "next/link";
 import Image from "next/image";
+import { useDebounce } from "use-debounce";
 function ProductListComponent() {
   const [search, setSearch] = useState("");
   const [products, setProducts] = useState([]);
+  const [value] = useDebounce(search, 500);
 
   const fetchProducts = () => {
     axiosInstance()
       .get("/products/", {
         params: {
-          productNamelike: search,
+          product_name: search,
         },
       })
       .then((res) => {
-        setProducts(res.data);
+        setProducts(res.data.result);
       })
       .catch((err) => console.log(err));
   };
   useEffect(() => {
     fetchProducts();
-  }, [search]);
+  }, [value]);
 
   const ps = useMemo(
     () => [...products].sort((a, b) => a.price - b.price),
@@ -60,16 +62,16 @@ function ProductListComponent() {
 
 export default ProductListComponent;
 
-export function ProductCard({ img, productName, id, price }) {
+export function ProductCard({ image_url, product_name, id, price }) {
   return (
     <Link className="flex flex-col" href={"/products/" + id}>
       <img
-        src={img}
+        src={image_url}
         className=" max-h-[154px] h-full max-w-[212px] w-full"
         alt=""
       />
       <div className="p-5 w-full h-full flex flex-col justify-between gap-2 ">
-        <div className=" font-bold w-full "> {productName}</div>
+        <div className=" font-bold w-full "> {product_name}</div>
 
         <div className="text-[#249C58] font-semibold  ">
           IDR {Number(price).toLocaleString()}

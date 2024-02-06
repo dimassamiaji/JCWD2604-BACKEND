@@ -7,15 +7,20 @@ import { NavbarAdminComponent } from "@/components/navbar";
 import Search from "@/assets/search.png";
 import { useFormik } from "formik";
 import { axiosInstance } from "@/axios/axios";
+import AdminProductCard from "@/components/admin/adminCard";
+import { useDebounce } from "use-debounce";
 
 /** @format */
 function Page() {
   const [search, setSearch] = useState("");
+  const [value] = useDebounce(search, 500);
+  const token = localStorage.getItem("user");
+
   const [products, setProducts] = useState([]);
   const initalProduct = {
-    productName: "",
+    product_name: "",
     price: 0,
-    productDescription: "",
+    description: "",
     img: "",
     id: 0,
   };
@@ -23,33 +28,29 @@ function Page() {
   const formik = useFormik({
     initialValues: initalProduct,
     onSubmit: () => {
+      console.log("test");
       save();
     },
   });
 
-  const edit2 = (product) => {
-    formik.setFieldValue("id", product.id);
-    formik.setFieldValue("productName", product.productName);
-    formik.setFieldValue("img", product.img);
-    formik.setFieldValue("price", product.price);
-    formik.setFieldValue("productDescription", product.productDescription);
-  };
-
   const edit = async (id) => {
     const res = await axiosInstance().get("/products/" + id);
-    const product = res.data;
+    const product = res.data.result;
     formik.setFieldValue("id", product.id);
-    formik.setFieldValue("productName", product.productName);
-    formik.setFieldValue("img", product.img);
+    formik.setFieldValue("product_name", product.product_name);
+    formik.setFieldValue("image_url", product.image_url);
     formik.setFieldValue("price", product.price);
-    formik.setFieldValue("productDescription", product.productDescription);
+    formik.setFieldValue("description", product.description);
   };
-
   const save = () => {
     console.log(formik.values);
     if (formik.values.id) {
       axiosInstance()
-        .patch("/products/" + formik.values.id, formik.values)
+        .patch("/products/" + formik.values.id, formik.values, {
+          headers: {
+            Authorization: token,
+          },
+        })
         .then(() => {
           alert("data berhasil diedit");
           fetchProducts();
@@ -89,17 +90,17 @@ function Page() {
     axiosInstance()
       .get("/products/", {
         params: {
-          productName_like: search,
+          product_name: search,
         },
       })
       .then((res) => {
-        setProducts(res.data);
+        setProducts(res.data.result);
       })
       .catch((err) => console.log(err));
   };
   useEffect(() => {
     fetchProducts();
-  }, [search]);
+  }, [value]);
 
   const upload = useRef(null);
   return (
@@ -149,8 +150,8 @@ function Page() {
                         placeholder="Product Name"
                         className="border p-1  w-96 "
                         required
-                        id="productName"
-                        value={formik.values.productName}
+                        id="product_name"
+                        value={formik.values.product_name}
                         onChange={formik.handleChange}
                       />
                     </td>
@@ -158,17 +159,17 @@ function Page() {
                   <tr>
                     <td> Product Image</td>
                     <td>
-                      <input
+                      {/* <input
                         type="file"
                         placeholder="Image URL"
                         className="border p-1  w-96 hidden"
                         required
-                        id="img"
+                        id="image_url"
                         // value={formik.values.img}
                         // onChange={formik.handleChange}
                         ref={upload}
-                      />
-                      <button
+                      /> */}
+                      {/* <button
                         className="bg-full bg-green-500  w-32 text-white rounded-md "
                         type="button"
                         onClick={() => {
@@ -176,7 +177,7 @@ function Page() {
                         }}
                       >
                         upload
-                      </button>
+                      </button> */}
                     </td>
                   </tr>
                   <tr>
@@ -203,8 +204,8 @@ function Page() {
                         placeholder="Description"
                         className="border p-1 w-96"
                         required
-                        value={formik.values.productDescription}
-                        id="productDescription"
+                        value={formik.values.description}
+                        id="description"
                         onChange={formik.handleChange}
                       />
                     </td>

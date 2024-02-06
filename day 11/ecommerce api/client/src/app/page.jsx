@@ -5,7 +5,7 @@ import ProductListComponent from "@/components/productList";
 import SliderComponent from "@/components/slider";
 
 export const metadata = {
-  title: "Kickavenue",
+  title: "Kickavenue - Home",
   description: "tempat jualan sepatu",
 };
 

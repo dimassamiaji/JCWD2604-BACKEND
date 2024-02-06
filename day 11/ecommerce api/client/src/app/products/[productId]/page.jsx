@@ -1,90 +1,37 @@
 /** @format */
-"use client";
-import { useParams } from "next/navigation";
 
-import { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
 import NavbarComponent from "@/components/navbar";
 import { axiosInstance } from "@/axios/axios";
 
-function Page() {
-  const { productId } = useParams();
-  const initalProduct = {
-    productName: "",
-    price: 0,
-    productDescription: "",
-    img: "",
-    id: 0,
-  };
-  const [product, setProduct] = useState({ ...initalProduct });
-  const userSelector = useSelector((state) => state.auth);
-  const buy = (e) => {
-    if (
-      window.confirm(
-        "apakah anda yakin membeli produk " + product.productName + "?"
-      )
-    ) {
-      e.preventDefault();
+export const metadata = {
+  title: "Kickavenue - Product Detail",
+  description: "tempat jualan sepatu",
+};
 
-      const qty = document.getElementById("qty").value;
-      const newOrder = {
-        productId: product.id,
-        userId: userSelector.id,
-        qty,
-        orderDate: new Date(),
-        totalPrice: qty * product.price,
-      };
-      axiosInstance()
-        .post("/orders", newOrder)
-        .then(() => {
-          alert("order berhasil dibuat");
-          document.getElementById("form").reset();
-        })
-        .catch((err) => console.log(err));
+async function Page({ params }) {
+  const { productId } = params;
 
-      axiosInstance().get("/products", {
-        params: {
-          productName: product.productName,
-          price: product.price,
-        },
-      });
-    }
-  };
-
-  const fetchProduct = () => {
-    axiosInstance()
-      .get("/products/" + productId)
-      .then((res) => {
-        setProduct(res.data);
-      })
-      .catch((err) => console.log(err.message));
-  };
-  const thisRef = useRef(null);
-
-  useEffect(() => {
-    fetchProduct();
-  }, []);
-
+  const product = (await axiosInstance().get("/products/" + productId)).data
+    .result;
+  console.log(product);
   return (
     <>
       <NavbarComponent />
       <div className="flex flex-col justify-center max-w-screen-2xl w-full items-center m-auto ">
         <div className="grid max-w-screen-2xl  md:grid-cols-2 p-7 gap-3 w-full  sm:grid-cols-1">
           <div className="m-auto">
-            <img src={product.img} alt="" />
+            <img src={product.image_url} alt="" />
           </div>
           <div className=" pt-10 flex flex-col gap-5  w-9/12">
-            <div className=" font-bold text-3xl" ref={thisRef}>
-              {product.productName}
-            </div>
+            <div className=" font-bold text-3xl">{product.product_name}</div>
             <div className="my-2">
               <div>start from</div>
               <div className="font-bold text-3xl">
-                IDR {product?.price?.toLocaleString()}
+                IDR {Number(product?.price).toLocaleString("id-ID")}
               </div>
             </div>
 
-            <form action="" onSubmit={buy} className="flex gap-3" id="form">
+            <form action="" className="flex gap-3" id="form">
               <input
                 className="h-[49px] border max-w-32 p-5 rounded-lg text-center"
                 type="number"
@@ -106,12 +53,13 @@ function Page() {
             <hr />
             <div className="font-semibold">Authentic. Guarateed.</div>
 
-            <div className=" text-justify">
+            <div className=" text-justify text-sm">
               {/* Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem,
               earum architecto nisi tempore, consectetur autem porro
               exercitationem soluta, corrupti dicta corporis similique
               repellendus quibusdam. */}
-              {product.productDescription}
+              {product.description ||
+                "We thoroughly check every purchase you make and applies our company's guarantee to the product's legitimacy. The guarantee is valid for 2 days after receiving the product from the delivery service. Should you have any concern about the product you purchase, kindly reach out to our Customer Service and Specialist on Monday - Saturday 10.00 - 21.00 (GMT+7 / WIB).\n"}
             </div>
           </div>
         </div>

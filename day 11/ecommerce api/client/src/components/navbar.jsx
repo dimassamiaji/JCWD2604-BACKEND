@@ -32,7 +32,9 @@ function NavbarComponent() {
       {/* login and register */}
       {userSelector?.id ? (
         <div className="flex gap-3">
-          <div>Welcome, {userSelector?.name}</div>
+          <div>
+            Welcome, {userSelector?.first_name + " " + userSelector?.last_name}
+          </div>
           <button
             className="rounded-md border-gray-500 border  px-2"
             onClick={logout}
@@ -76,7 +78,10 @@ export function NavbarAdminComponent() {
         {/* login and register */}
         {userSelector?.id ? (
           <div className="flex gap-3">
-            <div>Welcome, {userSelector?.name}</div>
+            <div>
+              Welcome,
+              {userSelector?.first_name + " " + userSelector?.last_name}
+            </div>
             <button
               className="rounded-md border-gray-500 border  px-2"
               onClick={logout}
