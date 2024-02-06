@@ -21,7 +21,8 @@ function Page() {
     product_name: "",
     price: 0,
     description: "",
-    img: "",
+    image_url: "",
+    image: null,
     id: 0,
   };
 
@@ -39,18 +40,23 @@ function Page() {
     formik.setFieldValue("id", product.id);
     formik.setFieldValue("product_name", product.product_name);
     formik.setFieldValue("image_url", product.image_url);
+
     formik.setFieldValue("price", product.price);
     formik.setFieldValue("description", product.description);
   };
   const save = () => {
     console.log(formik.values);
+
+    const form = new FormData();
+    form.append("product_name", formik.values.product_name);
+    form.append("image_url", formik.values.image_url);
+    form.append("image", formik.values.image);
+    form.append("price", formik.values.price);
+    form.append("description", formik.values.description);
+
     if (formik.values.id) {
       axiosInstance()
-        .patch("/products/" + formik.values.id, formik.values, {
-          headers: {
-            Authorization: token,
-          },
-        })
+        .patch("/products/" + formik.values.id, form)
         .then(() => {
           alert("data berhasil diedit");
           fetchProducts();
@@ -60,10 +66,8 @@ function Page() {
         });
     } else {
       axiosInstance();
-      const newProduct = { ...formik.values };
-      delete newProduct.id;
       axiosInstance()
-        .post("/products/", newProduct)
+        .post("/products/", form)
         .then(() => {
           alert("data berhasil ditambahkan");
           fetchProducts();
@@ -78,7 +82,11 @@ function Page() {
   const hapus = (id) => {
     if (window.confirm("apakah anda yakin menghapus product id " + id + "?"))
       axiosInstance()
-        .delete("/products/" + id)
+        .delete("/products/" + id, {
+          headers: {
+            Authorization: token,
+          },
+        })
         .then(() => {
           alert(`id ${id} berhasil dihapus`);
           fetchProducts();
@@ -98,6 +106,16 @@ function Page() {
       })
       .catch((err) => console.log(err));
   };
+
+  const renderFile = (e) => {
+    console.log(e.target.files[0]);
+    formik.setFieldValue("image", e.target.files[0]);
+    // formik.setFieldValue(
+    //   "image_url",
+    //   window.URL.createObjectURL(e.target.files[0])
+    // );
+  };
+
   useEffect(() => {
     fetchProducts();
   }, [value]);
@@ -159,17 +177,16 @@ function Page() {
                   <tr>
                     <td> Product Image</td>
                     <td>
-                      {/* <input
+                      <input
                         type="file"
                         placeholder="Image URL"
                         className="border p-1  w-96 hidden"
                         required
                         id="image_url"
-                        // value={formik.values.img}
-                        // onChange={formik.handleChange}
+                        onChange={(e) => renderFile(e)}
                         ref={upload}
-                      /> */}
-                      {/* <button
+                      />
+                      <button
                         className="bg-full bg-green-500  w-32 text-white rounded-md "
                         type="button"
                         onClick={() => {
@@ -177,7 +194,7 @@ function Page() {
                         }}
                       >
                         upload
-                      </button> */}
+                      </button>
                     </td>
                   </tr>
                   <tr>

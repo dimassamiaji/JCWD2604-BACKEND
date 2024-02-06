@@ -4,7 +4,11 @@ function AdminProductCard({ product_name, price, image_url, edit, hapus }) {
   return (
     <tr className="text-center">
       <td>
-        <img src={image_url} alt="" className=" w-24 object-cover" />
+        <img
+          src={process.env.API_URL + image_url}
+          alt=""
+          className=" w-24 object-cover"
+        />
       </td>
 
       <td className="text-left">{product_name}</td>
