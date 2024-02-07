@@ -14,7 +14,6 @@ import { useDebounce } from "use-debounce";
 function Page() {
   const [search, setSearch] = useState("");
   const [value] = useDebounce(search, 500);
-  const token = localStorage.getItem("user");
 
   const [products, setProducts] = useState([]);
   const initalProduct = {
@@ -46,7 +45,6 @@ function Page() {
   };
   const save = () => {
     console.log(formik.values);
-
     const form = new FormData();
     form.append("product_name", formik.values.product_name);
     form.append("image_url", formik.values.image_url);
@@ -82,11 +80,7 @@ function Page() {
   const hapus = (id) => {
     if (window.confirm("apakah anda yakin menghapus product id " + id + "?"))
       axiosInstance()
-        .delete("/products/" + id, {
-          headers: {
-            Authorization: token,
-          },
-        })
+        .delete("/products/" + id)
         .then(() => {
           alert(`id ${id} berhasil dihapus`);
           fetchProducts();
@@ -171,6 +165,9 @@ function Page() {
                         id="product_name"
                         value={formik.values.product_name}
                         onChange={formik.handleChange}
+                        // onChange={(e) => {
+                        //   formik.setFieldValue("product_name", e.target.value);
+                        // }}
                       />
                     </td>
                   </tr>
@@ -181,7 +178,6 @@ function Page() {
                         type="file"
                         placeholder="Image URL"
                         className="border p-1  w-96 hidden"
-                        required
                         id="image_url"
                         onChange={(e) => renderFile(e)}
                         ref={upload}

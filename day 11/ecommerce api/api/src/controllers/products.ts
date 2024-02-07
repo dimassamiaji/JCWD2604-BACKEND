@@ -113,6 +113,7 @@ export const productController = {
           },
         },
       };
+
       await prisma.product.create({
         data: newProduct,
       });

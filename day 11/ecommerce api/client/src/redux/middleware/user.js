@@ -1,7 +1,7 @@
 /** @format */
 
 import { axiosInstance } from "@/axios/axios";
-import { functionLogin } from "../slices/userSlice";
+import { functionLogin, functionLogout } from "../slices/userSlice";
 
 export const userLogin = ({ email, password }) => {
   return async (dispatch) => {
@@ -49,6 +49,7 @@ export const keepLogin = () => {
       return;
     } catch (err) {
       localStorage.removeItem("auth");
+      dispatch(functionLogout);
       return err.message;
     }
   };

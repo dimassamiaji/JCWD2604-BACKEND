@@ -12,6 +12,7 @@ route.get(
   },
   userController.login
 );
+route.get("/send-mail", userController.sendMail);
 route.get("/keep-login", userController.keepLogin);
 
 route.post("/", userController.register);

@@ -6,6 +6,7 @@ function AdminProductCard({ product_name, price, image_url, edit, hapus }) {
       <td>
         <img
           src={process.env.API_URL + image_url}
+          // src={image_url}
           alt=""
           className=" w-24 object-cover"
         />

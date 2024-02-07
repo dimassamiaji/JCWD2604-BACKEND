@@ -5,10 +5,16 @@ import { Prisma } from "@prisma/client"; // accessing interface/types
 
 import { genSalt, hash, compare } from "bcrypt";
 import { sign, verify } from "jsonwebtoken";
-
+import { mailer, transport } from "../lib/nodemailer";
+import mustache, { render } from "mustache";
+import fs from "fs";
 type TUser = {
   email: string;
 };
+
+const template = fs
+  .readFileSync(__dirname + "/../templates/verify.html")
+  .toString();
 
 export const userController = {
   async register(req: Request, res: Response, next: NextFunction) {
@@ -135,6 +141,30 @@ export const userController = {
         success: true,
         result: checkUser,
         token,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+  async sendMail(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { email, fullname } = req.query;
+
+      const rendered = mustache.render(template, {
+        email,
+        fullname,
+        verify_url: "",
+      });
+
+      mailer({
+        to: String(email),
+        subject: "verify account",
+        text: "",
+        html: rendered,
+      });
+
+      res.send({
+        message: "email berhasil dikirim",
       });
     } catch (error) {
       next(error);

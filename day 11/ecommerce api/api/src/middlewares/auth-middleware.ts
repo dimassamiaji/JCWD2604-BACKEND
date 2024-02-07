@@ -37,7 +37,6 @@ export const verifyUser = async (
     })) as TUser;
     if (!user.id) throw Error("not found");
     req.user = user as TUser;
-    req.body.test = "hehehe";
     next();
   } catch (err) {
     next(err);

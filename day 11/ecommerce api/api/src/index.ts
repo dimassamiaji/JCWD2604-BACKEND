@@ -9,7 +9,7 @@ config();
 
 export const prisma = new PrismaClient();
 
-export const secretKey = String(process.env.secret_key);
+export const secretKey = String(process.env.secretKey);
 const app: Application = express();
 app.use(express.json());
 app.use(cors());
