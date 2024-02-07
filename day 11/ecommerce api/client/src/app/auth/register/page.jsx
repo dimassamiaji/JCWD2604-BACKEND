@@ -13,13 +13,14 @@ function Page() {
 
   const formik = useFormik({
     initialValues: {
-      name: "",
+      first_name: "",
+      last_name: "",
+      gender: "male",
       email: "",
       password: "",
-      role: "user",
     },
     validationSchema: Yup.object().shape({
-      name: Yup.string().required(),
+      first_name: Yup.string().required(),
       email: Yup.string().required().email("bukan email"),
       password: Yup.string().required().min(5),
     }),
@@ -29,7 +30,8 @@ function Page() {
   });
   const mendaftar = () => {
     const user = formik.values;
-    if (user.email && user.name && user.password) {
+    console.log(user);
+    if (user.email && user.first_name && user.last_name && user.password) {
       axiosInstance()
         .post("/users", user)
         .then((res) => {
@@ -58,15 +60,25 @@ function Page() {
             langsung jadi deh!
           </p>
 
-          <div className=" font-bold mt-5">Nama Lenkgap</div>
+          <div className=" font-bold mt-5">First Name</div>
           <input
             className=" p-3 bg-[#F3F4F6] rounded-lg "
-            placeholder="chairin udin"
-            onChange={(e) => formik.setFieldValue("name", e.target.value)} //panggil function inputHandler otomatis kirim event
-            id="name"
-            value={formik.values.name}
+            placeholder="First name"
+            onChange={(e) => formik.setFieldValue("first_name", e.target.value)} //panggil function inputHandler otomatis kirim event
+            id="first_name"
+            value={formik.values.first_name}
           ></input>
-          <div className=" my-1 text-red-500">{formik.errors.name}</div>
+          <div className=" my-1 text-red-500">{formik.errors.first_name}</div>
+
+          <div className=" font-bold mt-5">Last Name</div>
+          <input
+            className=" p-3 bg-[#F3F4F6] rounded-lg "
+            placeholder="Last name"
+            onChange={(e) => formik.setFieldValue("last_name", e.target.value)} //panggil function inputHandler otomatis kirim event
+            id="last_name"
+            value={formik.values.last_name}
+          ></input>
+          <div className=" my-1 text-red-500">{formik.errors.last_name}</div>
 
           <div className=" font-bold mt-5">Email</div>
           <input
@@ -89,6 +101,17 @@ function Page() {
             value={formik.values.password}
           ></input>
           <div className=" my-1 text-red-500">{formik.errors.password}</div>
+
+          <div className=" font-bold mt-5">Gender</div>
+          <select
+            className=" p-3 bg-[#F3F4F6] rounded-lg  "
+            onChange={(e) => formik.setFieldValue("gender", e.target.value)} //panggil function inputHandler otomatis kirim event
+          >
+            <option value={"male"}>Male</option>
+            <option value={"female"}>Female</option>
+          </select>
+
+          <div className=" my-1 text-red-500">{formik.errors.gender}</div>
 
           <p className=" mt-5 text-[#989898] text-[13px]">
             Dengan mendaftar berarti kamu setuju dengan Terms of Service dan

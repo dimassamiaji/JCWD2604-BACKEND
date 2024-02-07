@@ -38,6 +38,7 @@ model User{
   first_name String
   last_name String
   role Role? @default(user)
+  isVerified Boolean @default(false)
   gender Gender?
   avatar_url String?
   createdAt DateTime @default(now())

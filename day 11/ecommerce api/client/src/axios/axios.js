@@ -11,3 +11,9 @@ export const axiosInstance = () => {
     },
   });
 };
+
+export const axiosInstanceSSR = () => {
+  return axios.create({
+    baseURL: "http://localhost:8000",
+  });
+};

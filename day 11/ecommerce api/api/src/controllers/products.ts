@@ -125,4 +125,26 @@ export const productController = {
       next(error);
     }
   },
+  async verifyUser(req: ReqUser, res: Response, next: NextFunction) {
+    try {
+      const { user } = req;
+      const verif: Prisma.UserUpdateInput = {
+        isVerified: true,
+      };
+      if (!user?.isVerified) throw Error("user already verified");
+      await prisma.user.update({
+        data: verif,
+        where: {
+          id: user.id,
+        },
+      });
+      console.log("aman");
+
+      res.send({
+        message: "success",
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
 };

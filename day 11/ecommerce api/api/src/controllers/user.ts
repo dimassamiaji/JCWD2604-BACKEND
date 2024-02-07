@@ -43,6 +43,24 @@ export const userController = {
       await prisma.user.create({
         data: newUser,
       });
+
+      const token = sign({ email }, secretKey, {
+        expiresIn: "1hr",
+      });
+
+      const rendered = mustache.render(template, {
+        email,
+        fullname: first_name + " " + last_name,
+        verify_url: process.env.verifyURL + token,
+      });
+
+      mailer({
+        to: email,
+        subject: "Verify Account",
+        text: "",
+        html: rendered,
+      });
+
       res.send({
         success: true,
         message: "berhasil register",

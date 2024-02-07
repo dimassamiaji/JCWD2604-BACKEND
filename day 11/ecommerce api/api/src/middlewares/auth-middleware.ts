@@ -12,6 +12,7 @@ export type TUser = {
   last_name: string;
   gender: string;
   role: string;
+  isVerified: boolean;
 };
 
 export interface ReqUser extends Request {
