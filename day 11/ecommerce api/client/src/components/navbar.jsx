@@ -1,11 +1,13 @@
 /** @format */
 "use client";
 import { useDispatch, useSelector } from "react-redux";
+import { FiShoppingCart } from "react-icons/fi";
 
 import { functionLogout } from "../redux/slices/userSlice";
 import UserIcon from "../assets/user.svg";
 import Link from "next/link";
 import Image from "next/image";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 function NavbarComponent() {
   const userSelector = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -14,7 +16,9 @@ function NavbarComponent() {
   };
 
   return (
-    <div className="flex justify-around  py-5  border-gray-400 items-center m-auto  max-w-screen-2xl w-full  sticky top-0 bg-white">
+    <div
+      className={`flex justify-around  py-5  border-gray-400 items-center m-auto  max-w-screen-2xl w-full  sticky top-0 bg-white`}
+    >
       {/* logo */}
       <Link className="font-bold text-xl" href={"/"}>
         BrandName
@@ -32,6 +36,9 @@ function NavbarComponent() {
       {/* login and register */}
       {userSelector?.id ? (
         <div className="flex gap-3">
+          <div className="flex items-center cursor-pointer">
+            <FiShoppingCart />
+          </div>
           <div>
             Welcome, {userSelector?.first_name + " " + userSelector?.last_name}
           </div>

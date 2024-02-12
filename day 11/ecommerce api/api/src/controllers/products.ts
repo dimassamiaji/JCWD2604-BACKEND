@@ -4,6 +4,7 @@ import { Response, Request, NextFunction } from "express";
 import { prisma } from "..";
 import { Prisma } from "@prisma/client";
 import { ReqUser } from "../middlewares/auth-middleware";
+
 export const productController = {
   async getProducts(req: Request, res: Response, next: NextFunction) {
     try {
@@ -120,28 +121,6 @@ export const productController = {
       res.send({
         success: true,
         message: "data berhasil ditambahkan",
-      });
-    } catch (error) {
-      next(error);
-    }
-  },
-  async verifyUser(req: ReqUser, res: Response, next: NextFunction) {
-    try {
-      const { user } = req;
-      const verif: Prisma.UserUpdateInput = {
-        isVerified: true,
-      };
-      if (!user?.isVerified) throw Error("user already verified");
-      await prisma.user.update({
-        data: verif,
-        where: {
-          id: user.id,
-        },
-      });
-      console.log("aman");
-
-      res.send({
-        message: "success",
       });
     } catch (error) {
       next(error);

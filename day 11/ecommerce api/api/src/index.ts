@@ -24,6 +24,7 @@ const PORT = process.env.PORT;
 //routes
 app.use("/users", routes.userRoutes);
 app.use("/products", routes.productRoutes);
+app.use("/carts", routes.cartRoutes);
 
 app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
   res.status(500).send({ message: error.message || "internal server error" });

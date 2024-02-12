@@ -1,7 +1,7 @@
 /** @format */
 
 import NavbarComponent from "@/components/navbar";
-import { axiosInstance } from "@/axios/axios";
+import { axiosInstanceSSR } from "@/axios/axios";
 
 export const metadata = {
   title: "Kickavenue - Product Detail",
@@ -11,7 +11,7 @@ export const metadata = {
 async function Page({ params }) {
   const { productId } = params;
 
-  const product = (await axiosInstance().get("/products/" + productId)).data
+  const product = (await axiosInstanceSSR().get("/products/" + productId)).data
     .result;
   console.log(product);
   return (
@@ -20,7 +20,11 @@ async function Page({ params }) {
       <div className="flex flex-col justify-center max-w-screen-2xl w-full items-center m-auto ">
         <div className="grid max-w-screen-2xl  md:grid-cols-2 p-7 gap-3 w-full  sm:grid-cols-1">
           <div className="m-auto">
-            <img src={product.image_url} alt="" />
+            <img
+              className=" max-w-[734px]  max-h-[523px]"
+              src={process.env.API_URL + product.image_url}
+              alt=""
+            />
           </div>
           <div className=" pt-10 flex flex-col gap-5  w-9/12">
             <div className=" font-bold text-3xl">{product.product_name}</div>

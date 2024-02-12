@@ -19,7 +19,7 @@ export default function RootLayout({ children }) {
     <StoreProvider>
       <html lang="en">
         <head>
-          <link rel="shortcut icon" href="fav.png" type="image/x-icon" />
+          {/* <link rel="shortcut icon" href="fav.png" type="image/x-icon" /> */}
         </head>
         <body className={inter.className}>
           <AuthProvider>

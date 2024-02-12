@@ -66,7 +66,7 @@ export function ProductCard({ image_url, product_name, id, price }) {
   return (
     <Link className="flex flex-col" href={"/products/" + id}>
       <img
-        src={image_url}
+        src={process.env.API_URL + image_url}
         className=" max-h-[154px] h-full max-w-[212px] w-full"
         alt=""
       />

@@ -20,8 +20,6 @@ route.patch(
   productController.editProduct
 );
 
-route.patch("/verify/", verifyUser, productController.verifyUser);
-
 route.post(
   "/",
   verifyUser,

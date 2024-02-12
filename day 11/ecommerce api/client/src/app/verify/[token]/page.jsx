@@ -5,18 +5,34 @@ import Image from "next/image";
 import { axiosInstanceSSR } from "@/axios/axios";
 
 async function Page({ params }) {
-  await axiosInstanceSSR().patch("/users/verify", {
-    headers: {
-      Authorization: params.token,
-    },
-  });
+  let isError = true;
+  let message = "";
+  await axiosInstanceSSR()
+    .patch(
+      "/users/verify",
+      {},
+      {
+        headers: {
+          Authorization: params.token,
+        },
+      }
+    )
+    .then((res) => {
+      message = res.data.message;
+      console.log(message);
+      isError = false;
+    })
+    .catch((error) => {
+      console.log(error.message);
+      message = error?.response?.data?.message;
+    });
+
   return (
-    <div>
-      <center>
-        <Image src={verify} alt=""></Image>
-        <Image src={error} alt=""></Image>
-      </center>
-    </div>
+    <center className="min-h-screen items-center flex-col justify-center  ">
+      <Image width={150} src={isError ? error : verify} alt=""></Image>
+      <h1 className=" font-bold text-2xl">{isError ? "Error" : "Success"}</h1>
+      <h1 className="">{message}</h1>
+    </center>
   );
 }
 export default Page;

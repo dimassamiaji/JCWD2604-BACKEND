@@ -27,6 +27,7 @@ export const verifyUser = async (
   try {
     // const token = req.header("Authorization")?.replace("Bearer ", "");
     const token = req.headers.authorization;
+
     if (!token) throw Error("unauthorized");
 
     const verifyToken = verify(String(token), secretKey) as TUser;
