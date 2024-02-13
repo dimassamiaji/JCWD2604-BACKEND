@@ -20,7 +20,7 @@ export const userController = {
       const checkPassword = await compare(password, checkUser.password);
       if (!checkPassword) throw Error("wrong password");
 
-      const { name, role } = checkUser;
+      const { name, role, id } = checkUser;
 
       //email,name,role
       const token = sign({ email, name, role }, String(process.env.secretKey), {
@@ -30,6 +30,7 @@ export const userController = {
       res.send({
         message: "berhasil login",
         result: {
+          id,
           email,
           name,
           role,
@@ -43,6 +44,14 @@ export const userController = {
   async register(req: Request, res: Response, next: NextFunction) {
     try {
       const { email, password, name } = req.body;
+
+      const check = await prisma.user.findUnique({
+        where: {
+          email,
+        },
+      });
+
+      if (check?.id) throw Error("email sudah terdaftar");
       const salt = await genSalt(10);
       const hashedPassword = await hash(password, salt);
 
@@ -60,6 +69,8 @@ export const userController = {
         message: "berhasil daftar",
       });
     } catch (error) {
+      console.log(error);
+
       next(error);
     }
   },
