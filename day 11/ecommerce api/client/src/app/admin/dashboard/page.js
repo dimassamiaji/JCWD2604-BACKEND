@@ -9,6 +9,7 @@ import { useFormik } from "formik";
 import { axiosInstance } from "@/axios/axios";
 import AdminProductCard from "@/components/admin/adminCard";
 import { useDebounce } from "use-debounce";
+import Image from "next/image";
 
 /** @format */
 function Page() {
@@ -122,7 +123,7 @@ function Page() {
         <div className="flex flex-col justify-center  max-w-[1000px] w-full items-center m-auto  ">
           <div className="py-5 w-full">
             <div className="flex px-3 items-center gap-3  border-gray-300 border-b w-72  p-2">
-              <img src={Search} alt="" className=" w-3 h-3" />
+              <Image src={Search} alt="" className=" w-3 h-3" />
               <input
                 type="text"
                 placeholder="Type any products here"

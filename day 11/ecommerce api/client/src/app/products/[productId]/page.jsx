@@ -62,8 +62,10 @@ async function Page({ params }) {
               earum architecto nisi tempore, consectetur autem porro
               exercitationem soluta, corrupti dicta corporis similique
               repellendus quibusdam. */}
-              {product.description ||
-                "We thoroughly check every purchase you make and applies our company's guarantee to the product's legitimacy. The guarantee is valid for 2 days after receiving the product from the delivery service. Should you have any concern about the product you purchase, kindly reach out to our Customer Service and Specialist on Monday - Saturday 10.00 - 21.00 (GMT+7 / WIB).\n"}
+              {
+                // product.description ||
+                "We thoroughly check every purchase you make and applies our company's guarantee to the product's legitimacy. The guarantee is valid for 2 days after receiving the product from the delivery service. Should you have any concern about the product you purchase, kindly reach out to our Customer Service and Specialist on Monday - Saturday 10.00 - 21.00 (GMT+7 / WIB).\n"
+              }
             </div>
           </div>
         </div>

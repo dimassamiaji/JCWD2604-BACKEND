@@ -7,6 +7,8 @@ import { route as todoRoutes } from "./routes/todos";
 import { PrismaClient } from "@prisma/client";
 import { verifyUser } from "./middlewares/verify-user";
 import cors from "cors";
+
+import bearerToken from "express-bearer-token";
 config();
 const app: Application = express();
 const PORT = process.env.PORT || 8000;
@@ -14,6 +16,7 @@ export const prisma = new PrismaClient();
 export const secretKey = process.env.secretKey;
 app.use(express.json());
 app.use(cors());
+app.use(bearerToken());
 app.use("/users", userRoutes);
 app.use("/todos", verifyUser, todoRoutes);
 

@@ -3,7 +3,7 @@
 import axios from "axios";
 
 export const axiosInstance = () => {
-  const token = localStorage.getItem("users");
+  const token = localStorage.getItem("user");
   return axios.create({
     baseURL: "http://localhost:8001",
     headers: {

@@ -1,7 +1,7 @@
 /** @format */
 
 import { axiosInstance } from "@/axios/axios";
-import { functionLogin } from "../slices/userSlice";
+import { functionLogin, functionLogout } from "../slices/userSlice";
 
 export const userLogin = ({ email, password }) => {
   return async (dispatch) => {
@@ -12,11 +12,27 @@ export const userLogin = ({ email, password }) => {
         email,
         password,
       });
-      const user = res.data.result;
-
+      console.log(res);
+      const user = res.data?.result;
+      user.token = res.data?.token;
       if (res.data.result?.id) dispatch(functionLogin(user));
 
       //res.data.result & res.data.token
     } catch (error) {}
+  };
+};
+
+export const keepLogin = () => {
+  return async (dispatch) => {
+    try {
+      console.log("hello");
+      const res = await axiosInstance().get("/users/v3");
+      const user = res.data.result;
+      user.token = res.data?.token;
+
+      if (res.data.result?.id) dispatch(functionLogin(user));
+    } catch (error) {
+      dispatch(functionLogout());
+    }
   };
 };

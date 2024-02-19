@@ -3,8 +3,9 @@
 import { Request, Response, NextFunction } from "express";
 import { verify } from "jsonwebtoken";
 import { prisma, secretKey } from "..";
+import { RequestToken } from "../types";
 
-export interface ReqUser extends Request {
+export interface ReqUser extends RequestToken {
   user?: TUser;
 }
 
@@ -21,7 +22,9 @@ export const verifyUser = async (
   next: NextFunction
 ) => {
   try {
-    const token = req.headers.authorization;
+    const token = req.token;
+    console.log(token);
+
     if (!token) throw Error("token not found");
     const userToken = verify(token, String(secretKey)) as TUser;
     const checkUser = (await prisma.user.findUnique({

@@ -36,7 +36,9 @@ export default function ProtectedPage({ children }) {
     else if (checkRoute?.type == needLogin && !userSelector.email)
       return redirect("/auth/login");
     else if (checkRoute?.type == guestOnly && userSelector.email)
-      return redirect("/");
+      return userSelector.role == "admin"
+        ? redirect("/admin/dashboard")
+        : redirect("/");
     else
       setTimeout(() => {
         setIsLoading(false);
