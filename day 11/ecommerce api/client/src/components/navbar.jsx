@@ -36,9 +36,9 @@ function NavbarComponent() {
       {/* login and register */}
       {userSelector?.id ? (
         <div className="flex gap-3">
-          <div className="flex items-center cursor-pointer">
+          <Link className="flex items-center cursor-pointer" href={"/cart"}>
             <FiShoppingCart />
-          </div>
+          </Link>
           <div>
             Welcome, {userSelector?.first_name + " " + userSelector?.last_name}
           </div>

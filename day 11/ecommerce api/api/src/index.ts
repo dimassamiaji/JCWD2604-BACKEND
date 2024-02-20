@@ -5,6 +5,9 @@ import { PrismaClient } from "@prisma/client";
 import { routes } from "./routes";
 import cors from "cors";
 import { config } from "dotenv";
+import Redis from "ioredis";
+export const redis = new Redis();
+
 config();
 
 export const prisma = new PrismaClient();

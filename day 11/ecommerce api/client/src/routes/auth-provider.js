@@ -13,7 +13,7 @@ function AuthProvider({ children }) {
     setTimeout(() => {
       setIsLoading(false);
     }, 500);
-  }, []);
+  });
   return <div>{isLoading ? <></> : children}</div>;
 }
 export default AuthProvider;

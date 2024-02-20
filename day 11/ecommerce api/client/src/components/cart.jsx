@@ -1,5 +1,4 @@
 /** @format */
-import { CiCircleMinus, CiCirclePlus } from "react-icons/ci";
 
 function CartComponent({ qty, product }) {
   return (
@@ -8,16 +7,18 @@ function CartComponent({ qty, product }) {
         <img
           src={process.env.API_URL + product.image_url}
           alt=""
-          className="   w-48 h-[136px] object-cover"
+          className=" w-24 h-auto  md:w-48 md:h-[136px] object-cover"
         />
-        <div className="text-left flex  py-4  w-full">
-          <div className="w-full">{product?.product_name}</div>
+        <div className="text-left md:flex  md:py-4  w-full">
+          <div className="w-full sm:text-left text-center">
+            {product?.product_name}
+          </div>
           <div className="w-full flex flex-col justify-between">
-            <div className="w-full text-lg font-bold text-right">
+            <div className="w-full md:text-lg text-center  font-bold sm:text-right">
               IDR {Number(product?.price * qty).toLocaleString("id-ID")}
             </div>
 
-            <div className="flex justify-end  gap-2">
+            <div className="flex sm:justify-end justify-center gap-2">
               <button>
                 <svg
                   class="nest-icon "

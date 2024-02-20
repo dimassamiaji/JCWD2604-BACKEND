@@ -38,6 +38,8 @@ export const keepLogin = () => {
         },
       });
 
+      console.log(res.data);
+
       if (res.data.result?.id) {
         dispatch(functionLogin(res.data.result));
 

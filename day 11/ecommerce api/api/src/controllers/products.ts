@@ -1,7 +1,7 @@
 /** @format */
 
 import { Response, Request, NextFunction } from "express";
-import { prisma } from "..";
+import { prisma, redis } from "..";
 import { Prisma } from "@prisma/client";
 import { ReqUser } from "../middlewares/auth-middleware";
 
@@ -9,27 +9,42 @@ export const productController = {
   async getProducts(req: Request, res: Response, next: NextFunction) {
     try {
       const { product_name } = req.query;
-      const products = await prisma.product.findMany({
-        include: {
-          user: {
-            select: {
-              id: true,
-              email: true,
-              first_name: true,
-              last_name: true,
+      // console.log(product_name);
+
+      let products;
+
+      const cachedData = await redis.get(String(product_name));
+
+      if (!cachedData) {
+        products = await prisma.product.findMany({
+          include: {
+            user: {
+              select: {
+                id: true,
+                email: true,
+                first_name: true,
+                last_name: true,
+              },
             },
           },
-        },
-        where: {
-          product_name: {
-            contains: String(product_name),
+          where: {
+            product_name: {
+              contains: String(product_name),
+            },
           },
-        },
-      });
+        });
+
+        await redis.set(
+          String(product_name),
+          JSON.stringify(products),
+          "EX",
+          6000
+        );
+      }
 
       res.send({
         success: true,
-        result: products,
+        result: JSON.parse(String(cachedData)) || products,
       });
     } catch (error) {
       next(error);
