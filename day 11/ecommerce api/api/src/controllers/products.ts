@@ -9,11 +9,11 @@ export const productController = {
   async getProducts(req: Request, res: Response, next: NextFunction) {
     try {
       const { product_name } = req.query;
-      // console.log(product_name);
 
       let products;
 
       const cachedData = await redis.get(String(product_name));
+      console.log(cachedData, product_name);
 
       if (!cachedData) {
         products = await prisma.product.findMany({
@@ -33,12 +33,11 @@ export const productController = {
             },
           },
         });
-
         await redis.set(
           String(product_name),
           JSON.stringify(products),
           "EX",
-          6000
+          10
         );
       }
 

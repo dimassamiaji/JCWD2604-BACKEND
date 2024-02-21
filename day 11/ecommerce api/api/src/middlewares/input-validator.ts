@@ -5,13 +5,16 @@ import { Response, Request, NextFunction } from "express";
 
 const schema = Joi.object({
   email: Joi.string().required().email().message("email tidak sesuai"),
+  //   repeat_password: Joi.valid(Joi.ref("password")).message(
+  //     "password harus sama"
+  //   ),
   password: Joi.string()
     .min(5)
     .max(16)
-    // .pattern(/(?=(?:.*[a-z]){1,16}).+/, "lowercase")
-    // .pattern(/(?=(?:.*[A-Z]){1,16}).+/, "uppercase")
-    // .pattern(/(?=(?:.*[0-9]){1,16}).+/, "number")
-    // .pattern(/(?=(?:.*[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]){1,16}).+/, "special")
+    .pattern(/(?=(?:.*[a-z]){1,16}).+/, "lowercase")
+    .pattern(/(?=(?:.*[A-Z]){1,16}).+/, "uppercase")
+    .pattern(/(?=(?:.*[0-9]){1,16}).+/, "number")
+    .pattern(/(?=(?:.*[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]){1,16}).+/, "special")
     .required()
     .error((errors) => {
       errors.forEach((err) => {
@@ -23,24 +26,24 @@ const schema = Joi.object({
             err.message = "error ";
             break;
           case "string.min":
-            err.message = "kurang dari 5";
+            err.message = "password kurang dari 5";
             break;
           case "string.max":
-            err.message = "max dari 16";
+            err.message = "password max 16";
             break;
           case "string.pattern.name":
             switch (err.local.name) {
               case "lowercase":
-                err.message = "harus terdapat 1 lowercase";
+                err.message = "password harus terdapat 1 lowercase";
                 break;
               case "uppercase":
-                err.message = "harus terdapat 1 uppercase ";
+                err.message = "password harus terdapat 1 uppercase ";
                 break;
               case "number":
-                err.message = "wajib ada number 1";
+                err.message = "password wajib ada number 1";
                 break;
               case "special":
-                err.message = "wajib terdapat special karakter";
+                err.message = "password wajib terdapat special karakter";
                 break;
             }
             break;
@@ -49,11 +52,7 @@ const schema = Joi.object({
 
       return errors;
     }),
-  first_name: Joi.string()
-    .required()
-    .lowercase()
-    .min(5)
-    .message("first_name minimal 5"),
+  first_name: Joi.string().required().min(5).message("first_name minimal 5"),
   last_name: Joi.string().required(),
   gender: Joi.string(),
 });

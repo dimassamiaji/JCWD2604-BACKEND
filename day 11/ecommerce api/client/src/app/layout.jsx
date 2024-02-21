@@ -16,17 +16,17 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <StoreProvider>
-      <html lang="en">
-        <head>
-          {/* <link rel="shortcut icon" href="fav.png" type="image/x-icon" /> */}
-        </head>
-        <body className={inter.className}>
+    <html lang="en">
+      <head>
+        {/* <link rel="shortcut icon" href="fav.png" type="image/x-icon" /> */}
+      </head>
+      <body className={inter.className}>
+        <StoreProvider>
           <AuthProvider>
             <ProtectedPage>{children}</ProtectedPage>
           </AuthProvider>
-        </body>
-      </html>
-    </StoreProvider>
+        </StoreProvider>
+      </body>
+    </html>
   );
 }
