@@ -17,7 +17,7 @@ function NavbarComponent() {
 
   return (
     <div
-      className={`flex justify-around  py-5  border-gray-400 items-center m-auto  max-w-screen-2xl w-full  sticky top-0 bg-white`}
+      className={`md:flex justify-around hidden   py-5  border-gray-400 items-center m-auto  max-w-screen-2xl w-full  sticky top-0 bg-white`}
     >
       {/* logo */}
       <Link className="font-bold text-xl" href={"/"}>

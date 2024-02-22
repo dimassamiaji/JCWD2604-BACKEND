@@ -12,9 +12,15 @@ function CartComponent({ qty, product }) {
   const [value] = useDebounce(quantity, 1000);
 
   useEffect(() => {
-    if (quantity) updateQty();
-    else deleteCart();
+    if (qty != quantity) {
+      if (quantity) updateQty();
+      else deleteCart();
+    }
   }, [value]);
+
+  useEffect(() => {
+    setQuantity(qty);
+  }, [product]);
 
   const updateQty = async () => {
     await axiosInstance().patch("/carts", {

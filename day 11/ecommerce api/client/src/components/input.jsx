@@ -1,8 +1,6 @@
 /** @format */
 "use client";
 
-import { useState } from "react";
-
 export function InputComponent({
   className,
   min = 0,
