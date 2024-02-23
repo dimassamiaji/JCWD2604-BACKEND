@@ -8,6 +8,8 @@ import UserIcon from "../assets/user.svg";
 import Link from "next/link";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { MenuRounded } from "@mui/icons-material";
+
 function NavbarComponent() {
   const userSelector = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -17,7 +19,7 @@ function NavbarComponent() {
 
   return (
     <div
-      className={`flex justify-around  py-5  border-gray-400 items-center m-auto  max-w-screen-2xl w-full  sticky top-0 bg-white`}
+      className={`flex md:justify-around justify-between  p-5  border-gray-400 items-center m-auto  max-w-screen-2xl w-full  sticky top-0 bg-white`}
     >
       {/* logo */}
       <Link className="font-bold text-xl" href={"/"}>
@@ -25,7 +27,7 @@ function NavbarComponent() {
       </Link>
 
       {/* menus */}
-      <div className="flex gap-4 text-sm font-semibold text-[#737373] items-center">
+      <div className=" gap-4 text-sm font-semibold text-[#737373] items-center hidden md:flex">
         <Link href="/">Home</Link>
         <Link href={"/"}>Shop</Link>
         <Link href={"/"}>About</Link>
@@ -34,33 +36,40 @@ function NavbarComponent() {
       </div>
 
       {/* login and register */}
-      {userSelector?.id ? (
-        <div className="flex gap-3">
-          <Link className="flex items-center cursor-pointer" href={"/cart"}>
-            <FiShoppingCart />
-          </Link>
-          <div>
-            Welcome, {userSelector?.first_name + " " + userSelector?.last_name}
+      <div className="hidden md:flex">
+        {userSelector?.id ? (
+          <div className="flex gap-3">
+            <Link className="flex items-center cursor-pointer" href={"/cart"}>
+              <FiShoppingCart />
+            </Link>
+            <div>
+              Welcome,{" "}
+              {userSelector?.first_name + " " + userSelector?.last_name}
+            </div>
+            <button
+              className="rounded-md border-gray-500 border  px-2"
+              onClick={logout}
+            >
+              Logout
+            </button>
           </div>
-          <button
-            className="rounded-md border-gray-500 border  px-2"
-            onClick={logout}
-          >
-            Logout
-          </button>
-        </div>
-      ) : (
-        <div className="flex gap-1 text-sm text-[#23A6F0] font-semibold items-center">
-          <Image src={UserIcon} alt="user icon"></Image>
-          <Link className="" href={"/auth/login"}>
-            Login
-          </Link>
-          /
-          <Link className=" " href={"/auth/register"}>
-            Register
-          </Link>
-        </div>
-      )}
+        ) : (
+          <div className="flex gap-1 text-sm text-[#23A6F0] font-semibold items-center">
+            <Image src={UserIcon} alt="user icon"></Image>
+            <Link className="" href={"/auth/login"}>
+              Login
+            </Link>
+            /
+            <Link className=" " href={"/auth/register"}>
+              Register
+            </Link>
+          </div>
+        )}
+      </div>
+
+      <div className=" md:hidden  ">
+        <MenuRounded />
+      </div>
     </div>
   );
 }
