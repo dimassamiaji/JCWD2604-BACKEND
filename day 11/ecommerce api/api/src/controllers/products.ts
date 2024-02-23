@@ -61,6 +61,14 @@ export const productController = {
               last_name: true,
             },
           },
+          stock: {
+            select: {
+              stock_qty: true,
+            },
+            where: {
+              status: "Available",
+            },
+          },
         },
         where: {
           id: Number(req.params.id),

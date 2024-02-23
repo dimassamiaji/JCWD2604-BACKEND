@@ -2,6 +2,8 @@
 
 import NavbarComponent from "@/components/navbar";
 import { axiosInstanceSSR } from "@/axios/axios";
+import { InputComponent } from "@/components/input";
+import { ProductDetailAddToCart } from "@/components/productList";
 
 export const metadata = {
   title: "Kickavenue - Product Detail",
@@ -34,59 +36,7 @@ async function Page({ params }) {
               </div>
             </div>
 
-            <form action="" className="flex gap-3" id="form">
-              {/* <input
-                className="h-[49px] border max-w-32 p-5 rounded-lg text-center"
-                type="number"
-                min={1}
-                placeholder="Quantity"
-                required
-                id="qty"
-              ></input> */}
-              <div className="flex  border-2 p-2 max-w-32 h-[49px] rounded-xl text-center">
-                <button type="button">
-                  <svg
-                    width="100%"
-                    height="100%"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <svg
-                      width="100%"
-                      height="100%"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path d="M20 12.75H4a.75.75 0 1 1 0-1.5h16a.75.75 0 1 1 0 1.5Z"></path>
-                    </svg>{" "}
-                  </svg>
-                </button>
-                <input
-                  className="w-full text-center outline-none "
-                  defaultValue={qty}
-                  min={1}
-                />
-                <button type="button">
-                  <svg
-                    width="100%"
-                    height="100%"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path d="M20 11.25h-7.25V4a.75.75 0 1 0-1.5 0v7.25H4a.75.75 0 1 0 0 1.5h7.25V20a.75.75 0 1 0 1.5 0v-7.25H20a.75.75 0 1 0 0-1.5Z"></path>
-                  </svg>
-                </button>
-              </div>
-              <button
-                type="submit"
-                className="h-[49px] border w-[168px] rounded-lg text-white bg-black hover:bg-white border-black hover:text-black"
-              >
-                Buy
-              </button>
-            </form>
+            <ProductDetailAddToCart product={product} qty={qty} />
             <div className="font-semibold">
               Please Make Sure The Size Fits You
             </div>
@@ -94,10 +44,6 @@ async function Page({ params }) {
             <div className="font-semibold">Authentic. Guarateed.</div>
 
             <div className=" text-justify text-sm">
-              {/* Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem,
-              earum architecto nisi tempore, consectetur autem porro
-              exercitationem soluta, corrupti dicta corporis similique
-              repellendus quibusdam. */}
               {
                 // product.description ||
                 "We thoroughly check every purchase you make and applies our company's guarantee to the product's legitimacy. The guarantee is valid for 2 days after receiving the product from the delivery service. Should you have any concern about the product you purchase, kindly reach out to our Customer Service and Specialist on Monday - Saturday 10.00 - 21.00 (GMT+7 / WIB).\n"

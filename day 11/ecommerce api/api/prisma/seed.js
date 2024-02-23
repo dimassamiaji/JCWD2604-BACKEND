@@ -31,16 +31,15 @@ const data = [
           id: 1,
           product_name: "Nike Air Force 1 '07 Low White Swoosh Panda",
           image_url:
-            "https://d5ibtax54de3q.cloudfront.net/eyJidWNrZXQiOiJraWNrYXZlbnVlLWFzc2V0cyIsImtleSI6InByb2R1Y3RzLzI2MjYzL2E4NGFlOGFiNTcwYzZlODRjZWEzMDI1OGY2ZTAwMTI5LnBuZyIsImVkaXRzIjp7InJlc2l6ZSI6eyJ3aWR0aCI6NDAwfSwid2VicCI6eyJxdWFsaXR5Ijo1MH19fQ==",
+            "PRODUCT_2024-02-07-11-28-25-536-55bb7930-c571-1133-am092-813085b035b2.png",
           price: 1570000,
           description: "",
         },
-
         {
           id: 2,
           product_name: "Nike Dunk Low Grey Fo",
           image_url:
-            "https://d5ibtax54de3q.cloudfront.net/eyJidWNrZXQiOiJraWNrYXZlbnVlLWFzc2V0cyIsImtleSI6InByb2R1Y3RzLzQyMTgzLzQ5NDRkZGZhOTdmODQxNTg1NjU5ODhiNGNiOWMzNzRmLmpwZWciLCJlZGl0cyI6eyJyZXNpemUiOnsid2lkdGgiOjQwMH0sIndlYnAiOnsicXVhbGl0eSI6NTB9fX0=",
+            "PRODUCT_2024-02-07-11-28-25-536-55bb7930-c571-1133-am092-813085b035b6.png",
           price: 1550000,
           description: "",
         },
@@ -48,7 +47,7 @@ const data = [
           id: 3,
           product_name: "Nike Dunk Low Polar Blue",
           image_url:
-            "https://d5ibtax54de3q.cloudfront.net/eyJidWNrZXQiOiJraWNrYXZlbnVlLWFzc2V0cyIsImtleSI6InByb2R1Y3RzLzQyMTgzLzQ5NDRkZGZhOTdmODQxNTg1NjU5ODhiNGNiOWMzNzRmLmpwZWciLCJlZGl0cyI6eyJyZXNpemUiOnsid2lkdGgiOjQwMH0sIndlYnAiOnsicXVhbGl0eSI6NTB9fX0=",
+            "PRODUCT_2024-02-07-11-28-25-536-55bb7930-c571-1133-am092-813085b035b2.png",
           price: 1450000,
           description: "",
         },
@@ -56,7 +55,7 @@ const data = [
           id: 4,
           product_name: "Nike P-6000 Light Iron Ore",
           image_url:
-            "https://d5ibtax54de3q.cloudfront.net/eyJidWNrZXQiOiJraWNrYXZlbnVlLWFzc2V0cyIsImtleSI6InByb2R1Y3RzLzcyODg5LzQ1ZDZjM2RjOTEzNTY3NjEyYjcwZjNlZGJiMzk1YzAwLnBuZyIsImVkaXRzIjp7InJlc2l6ZSI6eyJ3aWR0aCI6MTQwMH19fQ==",
+            "PRODUCT_2024-02-07-11-28-25-536-55bb7930-c571-1133-am092-813085b035b4.png",
           price: 2050000,
           description: "",
         },
@@ -64,7 +63,7 @@ const data = [
           id: 5,
           product_name: "Nike SB Dunk Low The Powerpuff Girls Bubbles",
           image_url:
-            "https://d5ibtax54de3q.cloudfront.net/eyJidWNrZXQiOiJraWNrYXZlbnVlLWFzc2V0cyIsImtleSI6InByb2R1Y3RzLzc3MjE3LzMzZjBkYmNlNGQ3YTc4OTQyMzllOTU1ZTgzOWE0OGNkLnBuZyIsImVkaXRzIjp7InJlc2l6ZSI6eyJ3aWR0aCI6MTQwMH19fQ==",
+            "PRODUCT_2024-02-07-11-28-25-536-55bb7930-c571-1133-am092-813085b035b5.png",
           price: 4950000,
           description: "",
         },
