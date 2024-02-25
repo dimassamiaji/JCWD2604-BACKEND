@@ -2,52 +2,60 @@
 "use client";
 import { Box, Button, Typography } from "@mui/material";
 import Modal from "@mui/material/Modal";
-import { useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import { useSelector } from "react-redux";
-import { Input } from "@mui/base";
 import { useFormik } from "formik";
+import { CartContext } from "@/app/cart/page";
+import { axiosInstance } from "@/axios/axios";
+
 const style = {
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  //   width: 400,
   maxWidth: 600,
   width: "100%",
   bgcolor: "background.paper",
-  //   border: "2px solid #000",
-  //   boxShadow: 24,
   p: 3,
 };
 
-export function AddressModal({ open, handleClose, total }) {
+export function AddressModal({ open, handleClose }) {
   const userSelector = useSelector((state) => state.auth);
   const [provinces, setProvinces] = useState([]);
   const [cities, setCities] = useState([]);
 
+  const { total, beli } = useContext(CartContext);
+
   const formik = useFormik({
     initialValues: {
-      province: 0,
-      city: "",
+      provinceId: 0,
+      cityId: 0,
+      address: "",
+      postal_code: 0,
     },
   });
+  const fetchProvince = async () => {
+    try {
+      const { data } = await axiosInstance().get("/addresses/province");
+      setProvinces(data.result);
+      fetchCity(data.result[0].id);
+    } catch (error) {}
+  };
+  const fetchCity = async (id) => {
+    try {
+      const { data } = await axiosInstance().get("/addresses/city/" + id);
+      setCities(data.result);
+    } catch (error) {}
+  };
 
   useEffect(() => {
-    fetch(`https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json`)
-      .then((response) => response.json())
-      .then((provinces) => setProvinces(provinces));
-  }, []);
+    fetchProvince();
+  }, [open]);
 
   useEffect(() => {
-    fetch(
-      `https://www.emsifa.com/api-wilayah-indonesia/api/regencies/${
-        formik.values.province || 11
-      }.json`
-    )
-      .then((response) => response.json())
-      .then((regencies) => setCities(regencies));
-  }, [formik.values.province]);
+    if (formik.values.provinceId) fetchCity(formik.values.provinceId);
+  }, [formik.values.provinceId]);
 
   return (
     <Modal
@@ -111,11 +119,11 @@ export function AddressModal({ open, handleClose, total }) {
               <label htmlFor=""> Province </label>
               <select
                 className=" p-2 border border-[#e1e1e2] rounded-lg w-full"
-                id="province"
+                id="provinceId"
                 onChange={formik.handleChange}
                 value={formik.values.province}
               >
-                {provinces.map((province) => (
+                {provinces?.map((province) => (
                   <option value={province.id}> {province.name}</option>
                 ))}
               </select>
@@ -124,12 +132,12 @@ export function AddressModal({ open, handleClose, total }) {
               <label htmlFor=""> City </label>
               <select
                 className=" p-2 border border-[#e1e1e2] rounded-lg w-full"
-                id="city"
+                id="cityId"
                 onChange={formik.handleChange}
                 value={formik.values.city}
               >
                 {cities.map((city) => (
-                  <option value={city.name}> {city.name}</option>
+                  <option value={city.id}> {city.name}</option>
                 ))}
               </select>
             </div>
@@ -137,28 +145,53 @@ export function AddressModal({ open, handleClose, total }) {
           <div className="flex justify-between gap-4 mt-4">
             <div className=" flex flex-col w-full">
               <label htmlFor=""> Address </label>
-              <input
-                className=" p-2 border border-[#e1e1e2] rounded-lg w-full"
-                // value={userSelector.email}
-              ></input>
+              <textarea
+                id="address"
+                onChange={formik.handleChange}
+                className=" p-2 border border-[#e1e1e2] rounded-lg w-full h-16 resize-none"
+              ></textarea>
             </div>
-            <div className=" flex flex-col  w-full">
+            <div className=" flex flex-col  w-3/4">
               <label htmlFor=""> Postal Code </label>
               <input
+                id="postal_code"
+                onChange={formik.handleChange}
                 className=" p-2 border border-[#e1e1e2] rounded-lg w-full"
-                // value={userSelector.gender}
               ></input>
             </div>
           </div>
-        </div>
 
-        <b>{total}</b>
+          <div className="flex justify-between border-b py-2 mt-4">
+            <b>BCA VIRTUAL ACCOUNT</b>
+          </div>
+
+          <div className="flex flex-col gap-4 mt-2">
+            <div className=" flex flex-col w-full">
+              <div>Nomor Virtual Account</div>
+              <b className="text-sm">80777087123458</b>
+            </div>
+            <div className=" flex flex-col w-full">
+              <div>Total Pembayaran</div>
+              <b className="text-sm">Rp{total.toLocaleString("id-ID")}</b>
+            </div>
+
+            <Button
+              type="button"
+              variant="contained"
+              onClick={() => {
+                beli(formik.values);
+              }}
+            >
+              Confirm Payment
+            </Button>
+          </div>
+        </div>
       </Box>
     </Modal>
   );
 }
 
-export function TransactionForm({ total }) {
+export function TransactionForm() {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -167,7 +200,7 @@ export function TransactionForm({ total }) {
       <Button fullWidth variant="contained" onClick={handleOpen}>
         Beli
       </Button>
-      <AddressModal open={open} handleClose={handleClose} total={total} />
+      <AddressModal open={open} handleClose={handleClose} />
     </>
   );
 }

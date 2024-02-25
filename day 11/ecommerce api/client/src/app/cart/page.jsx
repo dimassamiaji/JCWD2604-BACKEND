@@ -12,7 +12,6 @@ import { createContext } from "react";
 import { useDebounce } from "use-debounce";
 
 export const CartContext = createContext(null);
-
 function Page() {
   const [carts, setCart] = useState([]);
   const [total, setTotal] = useState(0);
@@ -32,14 +31,12 @@ function Page() {
       });
   };
 
-  const beli = async () => {
+  const beli = async (values) => {
     try {
-      await axiosInstance().post("/transactions", {
-        address_id: 1,
-      });
-      await fetchCart();
+      await axiosInstance().post("/transactions", values);
+      fetchCart();
     } catch (error) {
-      console.log(err);
+      console.log(error);
     }
   };
 
@@ -53,6 +50,8 @@ function Page() {
         value={{
           carts,
           fetchCart,
+          beli,
+          total,
         }}
       >
         <center>
@@ -73,7 +72,7 @@ function Page() {
                   <b>{total.toLocaleString("id-ID")}</b>
                 </div>
                 <div className=" py-3">
-                  <TransactionForm total={total} />
+                  <TransactionForm />
                 </div>
               </div>
             </div>

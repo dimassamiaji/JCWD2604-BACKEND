@@ -6,8 +6,10 @@ import { routes } from "./routes";
 import cors from "cors";
 import { config } from "dotenv";
 import Redis from "ioredis";
-export const redis = new Redis();
-
+export const client = Redis.createClient();
+client.on("error", () => {
+  client.disconnect();
+});
 config();
 
 export const prisma = new PrismaClient();
@@ -29,6 +31,7 @@ app.use("/users", routes.userRoutes);
 app.use("/products", routes.productRoutes);
 app.use("/carts", routes.cartRoutes);
 app.use("/transactions", routes.transactionRoutes);
+app.use("/addresses", routes.addressRoutes);
 
 app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
   res.status(500).send({ message: error.message || "internal server error" });

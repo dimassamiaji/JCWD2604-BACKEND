@@ -55,8 +55,10 @@ model Address {
   userId Int
   user   User  @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   address String
-  province String
-  city String
+  province   Province  @relation(fields: [provinceId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  provinceId Int
+  city   City  @relation(fields: [cityId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  cityId Int
   postal_code Int
   transactions Transaction[]
 }
@@ -132,3 +134,17 @@ model Cart {
   @@id([userId,productId])
 }
 
+model Province {
+  id Int @id
+  name String
+  address Address[]
+  cities City[]
+}
+
+model City {
+  id Int @id
+  name String
+  ProvinceId Int
+  province   Province  @relation(fields: [ProvinceId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  address Address[]
+}

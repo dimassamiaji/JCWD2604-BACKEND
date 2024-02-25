@@ -1,7 +1,7 @@
 /** @format */
 
 import { Response, Request, NextFunction } from "express";
-import { prisma, redis } from "..";
+import { prisma, client } from "..";
 import { Prisma } from "@prisma/client";
 import { ReqUser } from "../middlewares/auth-middleware";
 
@@ -12,8 +12,12 @@ export const productController = {
 
       let products;
 
-      const cachedData = await redis.get(String(product_name));
-      console.log(cachedData, product_name);
+      const cachedData = 0;
+
+      if (client.status != "end")
+        await client.get(String(product_name)).catch((err) => {
+          return 0;
+        });
 
       if (!cachedData) {
         products = await prisma.product.findMany({
@@ -33,12 +37,13 @@ export const productController = {
             },
           },
         });
-        await redis.set(
-          String(product_name),
-          JSON.stringify(products),
-          "EX",
-          10
-        );
+        if (client.status != "end")
+          await client.set(
+            String(product_name),
+            JSON.stringify(products),
+            "EX",
+            10
+          );
       }
 
       res.send({
