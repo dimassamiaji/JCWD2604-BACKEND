@@ -9,7 +9,15 @@ export const cartController = {
       const carts = await prisma.cart.findMany({
         include: {
           user: true,
-          product: true,
+          product: {
+            include: {
+              stock: {
+                select: {
+                  stock_qty: true,
+                },
+              },
+            },
+          },
         },
         where: {
           userId: req.user?.id,

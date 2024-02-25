@@ -23,11 +23,15 @@ function CartComponent({ qty, product }) {
   }, [product]);
 
   const updateQty = async () => {
-    await axiosInstance().patch("/carts", {
-      productId: product.id,
-      qty: quantity,
-    });
-    await fetchCart();
+    try {
+      await axiosInstance().patch("/carts", {
+        productId: product.id,
+        qty: quantity,
+      });
+      await fetchCart();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const deleteCart = async () => {
@@ -73,6 +77,7 @@ function CartComponent({ qty, product }) {
                 id={"cart_" + product.id}
                 quantity={quantity}
                 setQuantity={setQuantity}
+                max={product?.stock[0].stock_qty}
               />
             </div>
           </div>

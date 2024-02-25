@@ -13,7 +13,7 @@ export function InputComponent({
     if (quantity > min) setQuantity(quantity - 1);
   };
   const increment = () => {
-    if (quantity < max) setQuantity(quantity + 1);
+    if (quantity < Number(max)) setQuantity(Number(quantity) + 1);
   };
 
   const updateQty = (e) => {

@@ -3,6 +3,7 @@
 
 import { axiosInstance } from "@/axios/axios";
 import CartComponent from "@/components/cart";
+import { TransactionForm } from "@/components/modal/address";
 import NavbarComponent from "@/components/navbar";
 import { Button } from "@mui/material";
 import { create } from "@mui/material/styles/createTransitions";
@@ -29,6 +30,17 @@ function Page() {
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  const beli = async () => {
+    try {
+      await axiosInstance().post("/transactions", {
+        address_id: 1,
+      });
+      await fetchCart();
+    } catch (error) {
+      console.log(err);
+    }
   };
 
   useEffect(() => {
@@ -61,9 +73,7 @@ function Page() {
                   <b>{total.toLocaleString("id-ID")}</b>
                 </div>
                 <div className=" py-3">
-                  <Button fullWidth variant="contained">
-                    Beli
-                  </Button>
+                  <TransactionForm total={total} />
                 </div>
               </div>
             </div>
